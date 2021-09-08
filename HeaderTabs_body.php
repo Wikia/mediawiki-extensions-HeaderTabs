@@ -274,16 +274,17 @@ class HeaderTabs {
 
 		$tabTitle = Title::newFromText( $tabName );
 		$tabKey = $tabTitle->getDBkey();
-		$sanitizedLinkText = $parser->recursiveTagParse( $linkText );
 
 		if ( $anotherTarget != '' ) {
 			$targetTitle = Title::newFromText( $anotherTarget );
 			$targetURL = $targetTitle->getFullURL();
-
-			$output = '<a href="' . $targetURL . '#tab=' . $tabKey . '">' . $sanitizedLinkText . '</a>';
+			$linkAttrs = [ 'href' => $targetURL . '#tab=' . $tabKey ];
 		} else {
-			$output = '<a href="#tab=' . $tabKey . '" class="tabLink">' . $sanitizedLinkText . '</a>';
+			$linkAttrs = [ 'href' => '#tab=' . $tabKey, 'class' => 'tablink' ];
 		}
+
+		$sanitizedLinkText = $parser->recursiveTagParse( $linkText );
+		$output = Html::element( 'a', $linkAttrs, $sanitizedLinkText );
 
 		return $parser->insertStripItem( $output, $parser->mStripState );
 	}
